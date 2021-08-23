@@ -50,7 +50,7 @@ public class RestaurantController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Restaurant update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
         log.info("update {} ", restaurant);
-        Restaurant oldRestaurant = restaurantRepository.getById(id);
+        Restaurant oldRestaurant = checkNotFoundWithId(restaurantRepository.getById(id), id);
         ValidationUtil.assureIdConsistent(restaurant, oldRestaurant.id());
         restaurant.setId(oldRestaurant.getId());
         restaurant.setRating(oldRestaurant.getRating());
