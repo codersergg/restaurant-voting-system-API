@@ -13,18 +13,13 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "restaurant", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "id"}, name = "restaurant_unique_name_id_idx")})
+@Table(name = "restaurant", uniqueConstraints = {@UniqueConstraint(columnNames = {"name"}, name = "restaurant_unique_name_idx")})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @ToString(callSuper = true)
 public class Restaurant extends BaseEntity implements Serializable {
-
-    public Restaurant(String name, int rating) {
-        this.name = name;
-        this.rating = rating;
-    }
 
     @NotBlank
     @Size(min = 1, max = 100)
@@ -35,8 +30,14 @@ public class Restaurant extends BaseEntity implements Serializable {
     @Range(min = 0)
     private int rating;
 
+    @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private List<Dish> dishSet;
+
+    public Restaurant(String name, int rating) {
+        this.name = name;
+        this.rating = rating;
+    }
 }

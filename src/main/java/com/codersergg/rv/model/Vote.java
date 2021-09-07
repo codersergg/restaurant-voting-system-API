@@ -31,6 +31,7 @@ public class Vote extends BaseEntity implements Serializable {
     @JsonIgnore
     private Restaurant restaurant;
 
+    @ToString.Exclude
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
