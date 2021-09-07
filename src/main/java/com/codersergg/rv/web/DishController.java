@@ -54,7 +54,7 @@ public class DishController {
         created.setCreated(LocalDate.now());
         created.setRestaurant(checkNotFoundWithId(restaurantRepository.getById(restaurantId), restaurantId));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(URL + "/{restaurantId}/dish")
+                .path(URL + "/dish")
                 .buildAndExpand(created.getId()).toUri();
 
         return ResponseEntity.created(uriOfNewResource).body(created);

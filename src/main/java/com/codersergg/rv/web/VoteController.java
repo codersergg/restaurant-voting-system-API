@@ -31,7 +31,7 @@ import static com.codersergg.rv.util.ValidationUtil.*;
 @Slf4j
 @Tag(name = "Vote Controller")
 public class VoteController {
-    static final String URL = "/api/account/menu/vote";
+    static final String URL = "/api/account/vote";
 
     private final RestaurantRepository restaurantRepository;
     private final VoteRepository voteRepository;
@@ -50,7 +50,6 @@ public class VoteController {
                                        @AuthenticationPrincipal AuthUser authUser) {
         log.info("create {} {} ", vote, authUser);
         vote.setTime(LocalTime.now());
-        checkVoteDeadline(vote);
         ValidationUtil.checkNew(vote);
         Vote created = voteRepository.save(vote);
         created.setDate(LocalDate.now());
@@ -58,7 +57,7 @@ public class VoteController {
         created.setUser(authUser.getUser());
         created.setRestaurant(checkNotFoundWithId(restaurantRepository.getById(restaurantId), restaurantId));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path(URL + "/vote")
+                .path(URL)
                 .buildAndExpand(vote.getId()).toUri();
         countRating(restaurantId);
         return ResponseEntity.created(uriOfNewResource).body(created);

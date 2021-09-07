@@ -50,7 +50,7 @@ public class AccountController {
         user.setRoles(Set.of(Role.USER));
         user = userRepository.save(user);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/account")
+                .path(URL)
                 .build().toUri();
         return ResponseEntity.created(uriOfNewResource).body(user);
     }
