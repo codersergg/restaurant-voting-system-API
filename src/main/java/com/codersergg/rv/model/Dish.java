@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -30,6 +31,7 @@ public class Dish extends BaseEntity implements Serializable {
     @Range(min = 0)
     private int prise;
 
+    @NotNull
     @Column(name = "created")
     private LocalDate created;
 

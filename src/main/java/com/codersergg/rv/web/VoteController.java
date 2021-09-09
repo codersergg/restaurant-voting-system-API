@@ -49,13 +49,12 @@ public class VoteController {
                                        @PathVariable int restaurantId,
                                        @AuthenticationPrincipal AuthUser authUser) {
         log.info("create {} {} ", vote, authUser);
+        vote.setDate(LocalDate.now());
         vote.setTime(LocalTime.now());
+        vote.setUser(authUser.getUser());
+        vote.setRestaurant(checkNotFoundWithId(restaurantRepository.getOneById(restaurantId), restaurantId));
         ValidationUtil.checkNew(vote);
         Vote created = voteRepository.save(vote);
-        created.setDate(LocalDate.now());
-        created.setTime(LocalTime.now());
-        created.setUser(authUser.getUser());
-        created.setRestaurant(checkNotFoundWithId(restaurantRepository.getById(restaurantId), restaurantId));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(URL)
                 .buildAndExpand(vote.getId()).toUri();
@@ -78,14 +77,14 @@ public class VoteController {
         ValidationUtil.assureIdConsistent(vote, oldVote.id());
         vote.setId(oldVote.getId());
         vote.setUser(authUser.getUser());
-        vote.setRestaurant(checkNotFoundWithId(restaurantRepository.getById(restaurantId), restaurantId));
+        vote.setRestaurant(checkNotFoundWithId(restaurantRepository.getOneById(restaurantId), restaurantId));
         voteRepository.save(vote);
         countRating(restaurantId, oldRestaurantId);
     }
 
     public void countRating(int restaurantId) {
         log.info("countRating Restaurant: {} ", restaurantId);
-        Restaurant restaurant = checkNotFoundWithId(restaurantRepository.getById(restaurantId), restaurantId);
+        Restaurant restaurant = checkNotFoundWithId(restaurantRepository.getOneById(restaurantId), restaurantId);
         restaurant.setRating(restaurant.getRating() + 1);
         restaurantRepository.save(restaurant);
     }
@@ -93,7 +92,7 @@ public class VoteController {
     public void countRating(int restaurantId, int oldRestaurantId) {
         log.info("countRating Restaurant: {} Restaurant: {} ", restaurantId, oldRestaurantId);
         countRating(restaurantId);
-        Restaurant restaurant = checkNotFoundWithId(restaurantRepository.getById(oldRestaurantId), oldRestaurantId);
+        Restaurant restaurant = checkNotFoundWithId(restaurantRepository.getOneById(oldRestaurantId), oldRestaurantId);
         restaurant.setRating(restaurant.getRating() - 1);
         restaurantRepository.save(restaurant);
     }

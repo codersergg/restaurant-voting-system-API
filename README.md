@@ -17,7 +17,7 @@ Each restaurant offers a new menu every day.
 
 [REST API documentation](http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config)
 
-[POSTMAN](://app.getpostman.com/join-team?invite_code=52e5ee52d5ce4e719d88f240bb8919a9&ws=789aa5cd-5eab-4d38-8b77-3e61f9c8bb67)
+[POSTMAN](http://app.getpostman.com/join-team?invite_code=52e5ee52d5ce4e719d88f240bb8919a9&ws=789aa5cd-5eab-4d38-8b77-3e61f9c8bb67)
 
 ## Сredentials:
 

@@ -25,7 +25,7 @@ public class MenuController {
     @GetMapping
     public List<RestaurantTo> findAllRestaurantWithDishCreatedToday() {
         log.info("findAllRestaurantWithDishCreatedToday");
-        List<Dish> dishList = dishRepository.findAllDishCreatedToday();
+        List<Dish> dishList = dishRepository.findAllCreatedToday();
         return createMenuToday(dishList);
     }
 }

@@ -35,7 +35,7 @@ public class DishController {
 
     @GetMapping("/dish/{id}")
     public Dish get(@PathVariable int id) {
-        return checkNotFoundWithId(dishRepository.getById(id), id);
+        return checkNotFoundWithId(dishRepository.getOneById(id), id);
     }
 
     @DeleteMapping("/dish/{id}")
@@ -50,9 +50,8 @@ public class DishController {
     public ResponseEntity<Dish> create(@Valid @RequestBody Dish dish, @PathVariable int restaurantId) {
         log.info("create {} ", dish);
         ValidationUtil.checkNew(dish);
+        dish.setRestaurant(checkNotFoundWithId(restaurantRepository.getOneById(restaurantId), restaurantId));
         Dish created = dishRepository.save(dish);
-        created.setCreated(LocalDate.now());
-        created.setRestaurant(checkNotFoundWithId(restaurantRepository.getById(restaurantId), restaurantId));
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(URL + "/dish")
                 .buildAndExpand(created.getId()).toUri();
@@ -65,14 +64,10 @@ public class DishController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Dish update(@Valid @RequestBody Dish dish, @PathVariable int id) {
         log.info("update {} ", dish);
-        Dish oldDish = checkNotFoundWithId(dishRepository.getById(id), id);
+        Dish oldDish = checkNotFoundWithId(dishRepository.getOneById(id), id);
         assureIdConsistent(dish, oldDish.id());
         dish.setId(oldDish.getId());
-        dish.setCreated(LocalDate.now());
         dish.setRestaurant(oldDish.getRestaurant());
-        if (dish.getName() == null) {
-            dish.setName(oldDish.getName());
-        }
         if (dish.getPrise() == 0) {
             dish.setPrise(oldDish.getPrise());
         }

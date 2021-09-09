@@ -4,6 +4,7 @@ import com.codersergg.rv.model.Dish;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,10 +17,10 @@ import java.util.List;
 public interface DishRepository extends JpaRepository<Dish, Integer> {
 
     @Query("SELECT d FROM Dish d WHERE d.id = ?1")
-    Dish getById(Integer integer);
+    Dish getOneById(int id);
 
     @Query("SELECT d FROM Dish d WHERE d.created = current_date ")
-    List<Dish> findAllDishCreatedToday();
+    List<Dish> findAllCreatedToday();
 
     @Override
     @Modifying

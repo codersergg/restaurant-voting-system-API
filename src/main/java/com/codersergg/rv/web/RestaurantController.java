@@ -36,7 +36,7 @@ public class RestaurantController {
 
     @GetMapping("/{id}")
     public Restaurant get(@PathVariable int id) {
-        return checkNotFoundWithId(restaurantRepository.getById(id), id);
+        return checkNotFoundWithId(restaurantRepository.getOneById(id), id);
     }
 
     @DeleteMapping("/{id}")
@@ -50,7 +50,7 @@ public class RestaurantController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Restaurant update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
         log.info("update {} ", restaurant);
-        Restaurant oldRestaurant = checkNotFoundWithId(restaurantRepository.getById(id), id);
+        Restaurant oldRestaurant = checkNotFoundWithId(restaurantRepository.getOneById(id), id);
         ValidationUtil.assureIdConsistent(restaurant, oldRestaurant.id());
         restaurant.setId(oldRestaurant.getId());
         restaurant.setRating(oldRestaurant.getRating());
@@ -60,6 +60,7 @@ public class RestaurantController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Restaurant> create(@Valid @RequestBody Restaurant restaurant) {
         ValidationUtil.checkNew(restaurant);
+        restaurant.setRating(0);
         Restaurant created = restaurantRepository.save(restaurant);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(URL)
